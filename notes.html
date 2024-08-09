@@ -1,0 +1,166 @@
+6thsemNa.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6th Semester Assignments</title>
+    <link rel="stylesheet" href="notes.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+</head>
+<body>
+    <h1>6th Semester Assignments</h1>
+    <div class="container">
+        <div class="assignments" style="background-color: #ffffff;">
+            <h2>Assignments</h2>
+            <div>
+                <input type="text" id="assignmentInput" placeholder="Add an assignment...">
+                <button onclick="addAssignment()">Add Assignment</button>
+            </div>
+            <div>
+                <button onclick="selectPdfFile()">Add Assignment from PDF</button>
+            </div>
+            <ul id="assignmentList"></ul>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" style="display: none;" accept=".pdf">
+
+    <script>
+        function addAssignment() {
+            var input = document.getElementById("assignmentInput").value;
+            if (input !== "") {
+                var assignmentName = prompt("Enter the name for the assignment:", "Untitled Assignment");
+                if (assignmentName !== null) {
+                    var node = createItem(assignmentName, input);
+                    document.getElementById("assignmentList").appendChild(node);
+                    document.getElementById("assignmentInput").value = "";
+                }
+            } else {
+                alert("Please enter an assignment.");
+            }
+        }
+
+        function selectPdfFile() {
+            var fileInput = document.getElementById('fileInput');
+            fileInput.accept = ".pdf";
+            fileInput.onchange = function(event) {
+                var file = event.target.files[0];
+                if (file) {
+                    var assignmentName = prompt("Enter the name for the assignment:", file.name);
+                    if (assignmentName !== null) {
+                        var reader = new FileReader();
+                        reader.onload = function(event) {
+                            var fileContent = event.target.result;
+                            var node = createItemWithFile(assignmentName, fileContent);
+                            document.getElementById("assignmentList").appendChild(node);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                } else {
+                    alert("Please select a PDF file.");
+                }
+            };
+            fileInput.click();
+        }
+
+        function createItem(name, content) {
+            var node = document.createElement("LI");
+            var nameNode = document.createTextNode(name);
+            node.appendChild(nameNode);
+
+            var assignmentContent = document.createElement("div");
+            assignmentContent.style.display = "none";
+            assignmentContent.textContent = content;
+            node.appendChild(assignmentContent);
+
+            var openButton = document.createElement("button");
+            openButton.textContent = "Open";
+            openButton.onclick = function() {
+                if (assignmentContent.style.display === "none") {
+                    assignmentContent.style.display = "block";
+                    openButton.textContent = "Close";
+                } else {
+                    assignmentContent.style.display = "none";
+                    openButton.textContent = "Open";
+                }
+            };
+            node.appendChild(openButton);
+
+            var editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.onclick = function() {
+                var newName = prompt("Enter the new name for the assignment:", name);
+                var newContent = prompt("Enter the new content for the assignment:", content);
+                if (newName !== null && newContent !== null) {
+                    nameNode.nodeValue = newName;
+                    content = newContent;
+                }
+            };
+            node.appendChild(editButton);
+
+            var deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = function() {
+                node.parentNode.removeChild(node);
+            };
+            node.appendChild(deleteButton);
+
+            return node;
+        }
+        function createItemWithFile(name, content) {
+    var node = document.createElement("LI");
+
+    var nameNode = document.createTextNode(name);
+    node.appendChild(nameNode);
+
+    var pdfViewer = document.createElement("iframe");
+    pdfViewer.style.width = "100%";
+    pdfViewer.style.height = "600px";
+    pdfViewer.style.display = "none"; // Initially hide the PDF viewer
+
+    var openButton = document.createElement("button");
+    openButton.textContent = "Open PDF";
+    var isOpen = false; // Track the state of the PDF viewer
+    openButton.onclick = function() {
+        if (!isOpen) { // If PDF viewer is closed, open it
+            pdfViewer.src = "data:application/pdf;base64," + content;
+            pdfViewer.style.display = "block";
+            openButton.textContent = "Close PDF";
+            isOpen = true;
+        } else { // If PDF viewer is open, close it
+            pdfViewer.style.display = "none";
+            openButton.textContent = "Open PDF";
+            isOpen = false;
+        }
+    };
+    node.appendChild(openButton);
+
+    node.appendChild(pdfViewer);
+
+    var editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.onclick = function() {
+        var newName = prompt("Enter the new name for the assignment:", name);
+        var newContent = prompt("Enter the new content for the assignment:", content);
+        if (newName !== null && newContent !== null) {
+            nameNode.nodeValue = newName;
+            content = newContent;
+        }
+    };
+    node.appendChild(editButton);
+
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.onclick = function() {
+        node.parentNode.removeChild(node);
+    };
+    node.appendChild(deleteButton);
+
+    return node;
+}
+
+    </script>
+</body>
+</html>

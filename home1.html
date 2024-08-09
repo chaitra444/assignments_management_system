@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="notes.css">
+    <script>
+        function goToSemPage() {
+            window.location.href = "notes.html";
+        }
+
+        // Function to handle file upload
+        function handleFileUpload(event) {
+            const fileInput = event.target;
+            const files = fileInput.files;
+            const fileDisplayArea = document.getElementById('file-display-area');
+
+            // Loop through the files and display them
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileType = file.type;
+                const fileName = file.name;
+
+                // Check if file type is text or pdf
+                if (fileType.startsWith('text/') || fileType === 'application/pdf') {
+                    const fileLink = document.createElement('a');
+                    fileLink.href = URL.createObjectURL(file);
+                    fileLink.textContent = fileName;
+                    fileLink.setAttribute('download', fileName);
+                    fileDisplayArea.appendChild(fileLink);
+                    fileDisplayArea.appendChild(document.createElement('br'));
+                } else {
+                    alert('Only text and PDF files are allowed.');
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="background-img"></div> <!-- Background image -->
+    <div class="content">
+        
+        <h5>JSS MAHAVIDYAPITA</h5>
+        <h3>JSS SCIENCE AND TECHNOLOGY UNIVERSITY MYSORE</h3>
+        <h4>Welcome To The Web Page Of Notes And Assignments</h4>
+        <pre>"Our notes and assignment management website offers a comprehensive platform for students to organize and streamline their academic tasks effectively. 
+With intuitive features, users can effortlessly create, edit, and categorize their notes and assignments, ensuring they stay on top of their coursework.
+Our platform facilitates seamless collaboration by allowing users to share notes and assignments with classmates or project partners. 
+Additionally, users can upload files in various formats, including text documents and PDFs, providing flexibility in how they manage their academic materials.
+With our user-friendly interface and robust functionality, students can enhance their productivity and achieve academic success with ease."</pre>
+        
+        <!-- File upload input -->
+        <input type="file" id="file-input" multiple onchange="handleFileUpload(event)">
+        <div id="file-display-area"></div>
+        
+        <div class="scroll-container">
+            <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bm90ZXN8ZW58MHx8MHx8fDA%3D" alt="Scroll Image 1">
+            <img src="https://thumbs.dreamstime.com/b/assignment-word-cloud-concept-grey-background-90878926.jpg" alt="Scroll Image 2">
+        </div>
+        <button onclick="goToSemPage()"> Notes and Assignments</button>
+        <h5>Thank you for visiting!</h5>
+        <h6>For any query visit @<a href="https://jssstuniv.in/#/"> JSSSTU website</a></h6>
+    </div>
+</body>
+</html>
